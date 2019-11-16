@@ -43,10 +43,15 @@ class State(val n: Int) {
   private var containsBomb: Array[Array[Boolean]] = Array.ofDim[Boolean](n, n)
   private val exposed = Array.ofDim[Boolean](n, n)
   private val chosen = Array.ofDim[Boolean](n, n)
+  private var bombsPlanted = 0
   for (row <- 0 until n) {
     for (col <- 0 until n) {
-      if (random.nextDouble < bombCount.toDouble / (n * n).toDouble) {
+      val squaresCovered = row * n + col
+      val bombsRemaining = bombCount - bombsPlanted
+      val squaresNotCovered = n * n - squaresCovered
+      if (random.nextDouble < bombsRemaining.toDouble / squaresNotCovered.toDouble) {
         containsBomb(row)(col) = true
+        bombsPlanted = bombsPlanted + 1
       }
     }
   }
@@ -70,7 +75,7 @@ class State(val n: Int) {
     if (!exposed(row)(col)) {
       " "
     } else if (exposed(row)(col) && containsBomb(row)(col)) {
-      "ó"
+      "X"
     } else {
       getNeighboringBombCount(row, col).toString
     }
@@ -100,5 +105,6 @@ class State(val n: Int) {
       print("--")
     }
     println("-")
+    println()
   }
 }
