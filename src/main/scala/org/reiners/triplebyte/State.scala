@@ -69,6 +69,8 @@ class State(val n: Int) {
   def getSquareDisplay(row: Int, col: Int): String = {
     if (!exposed(row)(col)) {
       " "
+    } else if (exposed(row)(col) && containsBomb(row)(col)) {
+      "ó"
     } else {
       getNeighboringBombCount(row, col).toString
     }
