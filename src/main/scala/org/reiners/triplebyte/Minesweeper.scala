@@ -13,13 +13,21 @@ object Minesweeper {
 
 
   def main(args: Array[String]): Unit = {
-    val state: State = new org.reiners.triplebyte.State()
+    val state: State = new org.reiners.triplebyte.State(9)
+    var done = false
     while (!done) {
       state.printBoard()
       val playerChoice: (Integer, Integer) = getPlayerChoice
       state.update(playerChoice)
+      if (state.gameOver()) {
+        done = true
+        if (state.playerLost()) {
+          println("You lose!")
+        } else {
+          println("You win!")
+        }
+      }
     }
+    state.printBoard()
   }
-
-  def done: Boolean = false
 }
