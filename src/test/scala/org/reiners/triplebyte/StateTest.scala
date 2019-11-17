@@ -2,6 +2,43 @@ package org.reiners.triplebyte
 
 
 class StateTest extends org.scalatest.FunSuite {
+  test("3x3 with 3 bombs - win") {
+    val n = 3
+    val containsBomb = Array.ofDim[Boolean](n, n)
+    val col = 1
+    for (row <- 0 until 3) {
+      containsBomb(row)(col) = true
+    }
+    val state = new State(n, containsBomb)
+    val gameOverBefore = state.gameOver()
+    assert(!gameOverBefore)
+    val playerWonBefore = state.playerWon()
+    assert(!playerWonBefore)
+    val playerLostBefore = state.playerLost()
+    assert(!playerLostBefore)
+
+    val cols = List(0, 2)
+    cols.foreach((col: Int) =>
+    for (row <- 0 until 3) {
+      state.update(row, col)
+      if (col != 2 || row != 2) {
+        val gameOverAfter = state.gameOver()
+        assert(!gameOverAfter)
+        val playerWonAfter = state.playerWon()
+        assert(!playerWonAfter)
+        val playerLostAfter = state.playerLost()
+        assert(!playerLostAfter)
+      } else {
+        val gameOverAfter = state.gameOver()
+        assert(gameOverAfter)
+        val playerWonAfter = state.playerWon()
+        assert(playerWonAfter)
+        val playerLostAfter = state.playerLost()
+        assert(!playerLostAfter)
+      }
+    })
+  }
+
   test("2x2 with 1 bomb - win") {
     val n = 2
     val containsBomb = Array.ofDim[Boolean](n, n)
